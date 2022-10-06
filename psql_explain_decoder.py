@@ -41,7 +41,7 @@ def decode(plans, parent):
         elif node_type == 'Limit':
             join_order += 'yuxi'
         elif node_type in ['Merge Join', 'Hash Join', 'Nested Loop']:
-            join_order += '('
+            join_order += node_type + '('
             _join_order, _join_conds, _single_scans = decode(plans[i]['Plans'], node_type)
             join_order += _join_order
             join_conds += _join_conds
