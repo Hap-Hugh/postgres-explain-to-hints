@@ -30,13 +30,16 @@ def decode(plans, parent):
         node_type = plans[i]['Node Type']
         if 'Plans' not in plans[i]:
             # is a leaf
+            print("!!!", node_type)
             single_scans.append(node_type + '(' + plans[i]['Alias'] + ')')
 
-        if node_type in ['Limit', 'Aggregate', 'Gather', 'Sort', 'Materialize', 'Sort', 'Hash']:
+        if node_type in ['Aggregate', 'Gather', 'Sort', 'Materialize', 'Sort', 'Hash']:
             _join_order, _join_conds, _single_scans = decode(plans[i]['Plans'], parent)
             join_order += _join_order
             join_conds += _join_conds
             single_scans.extend(_single_scans)
+        elif node_type == 'Limit':
+            join_order += 'yuxi'
         elif node_type in ['Merge Join', 'Hash Join', 'Nested Loop']:
             join_order += '('
             _join_order, _join_conds, _single_scans = decode(plans[i]['Plans'], node_type)
