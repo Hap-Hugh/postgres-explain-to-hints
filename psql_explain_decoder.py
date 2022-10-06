@@ -11,6 +11,7 @@ def load(filename):
         data = json.load(fin)
     return data[0][0][0]['Plan']
 
+
 def decode(plans, parent):
     if len(plans) < 1 or len(plans) > 2:
         raise ValueError('incorrect number of plans')
@@ -31,7 +32,7 @@ def decode(plans, parent):
             # is a leaf
             single_scans.append(node_type + '(' + plans[i]['Alias'] + ')')
 
-        if node_type in ['Aggregate', 'Gather', 'Sort', 'Materialize', 'Sort', 'Hash']:
+        if node_type in ['Limit', 'Aggregate', 'Gather', 'Sort', 'Materialize', 'Sort', 'Hash']:
             _join_order, _join_conds, _single_scans = decode(plans[i]['Plans'], parent)
             join_order += _join_order
             join_conds += _join_conds
@@ -56,7 +57,7 @@ def decode(plans, parent):
             
     return join_order, join_conds, single_scans
           
-plan = load('query_plan_2 (1).json')
+plan = load('query_plan_1.json')
 join_order, join_conds, single_scans = decode(plan['Plans'], plan['Node Type'])
 print(join_order)
 print(join_conds)
