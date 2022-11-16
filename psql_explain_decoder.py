@@ -33,7 +33,7 @@ def decode(plans, parent):
             print("!!!", node_type)
             single_scans.append(node_type + '(' + plans[i]['Alias'] + ')')
 
-        if node_type in ['Aggregate', 'Gather', 'Sort', 'Materialize', 'Sort', 'Hash']:
+        if node_type in ['Aggregate', 'Gather', 'Sort', 'Materialize', 'Sort', 'Hash', 'Gather Merge']:
             _join_order, _join_conds, _single_scans = decode(plans[i]['Plans'], parent)
             join_order += _join_order
             join_conds += _join_conds
@@ -59,7 +59,8 @@ def decode(plans, parent):
             join_order += ','
             
     return join_order, join_conds, single_scans
-          
+
+# examples
 plan = load('query_plan_1.json')
 join_order, join_conds, single_scans = decode(plan['Plans'], plan['Node Type'])
 print(join_order)
