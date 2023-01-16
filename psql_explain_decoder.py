@@ -1,4 +1,16 @@
 import json
+'''
+Decode the pg_explain result (json format) into readable format
+
+Input: postgres explain (json format)
+
+Output:
+
+Merge Join(Merge Join(Merge Join(Merge Join(Nested Loop(yuxi,mc),Nested Loop(yuxi,mi_idx)),Nested Loop(yuxi,ct)),Nested Loop(yuxi,t)),Nested Loop(yuxi,it))
+['Nested Loop', 'Nested Loop', 'Merge Join(mc.movie_id = mi_idx.movie_id)', 'Nested Loop', 'Merge Join(mc.company_type_id = ct.id)', 'Nested Loop', 'Merge Join(mc.movie_id = t.id)', 'Nested Loop', 'Merge Join(mi_idx.info_type_id = it.id)']
+['Index Scan(mc)', 'Index Scan(mi_idx)', 'Index Scan(ct)', 'Index Scan(t)', 'Index Scan(it)']
+
+'''
 
 join_type_to_cond_field = {
     'Merge Join' : 'Merge Cond',
@@ -30,7 +42,7 @@ def decode(plans, parent):
         node_type = plans[i]['Node Type']
         if 'Plans' not in plans[i]:
             # is a leaf
-            print("!!!", node_type)
+            # print("!!!", node_type)
             single_scans.append(node_type + '(' + plans[i]['Alias'] + ')')
 
         if node_type in ['Aggregate', 'Gather', 'Sort', 'Materialize', 'Sort', 'Hash', 'Gather Merge']:
