@@ -1,0 +1,13 @@
+    HashJoin(v p b c u) rows=425061931 cost=26419.02..83975.29
+        clauses: u.id = c.userid
+        SeqScan(c) rows=174305 cost=0.00..3024.05
+        HashJoin(v p b u) rows=713054 cost=11607.65..14023.84
+            clauses: u.id = b.userid
+            SeqScan(b) rows=78820 cost=0.00..1629.76
+            HashJoin(v p u) rows=20072 cost=4209.41..11356.75
+                clauses: p.owneruserid = u.id
+                HashJoin(v p) rows=21291 cost=2724.18..9815.62
+                    clauses: v.postid = p.id
+                    SeqScan(v) rows=327846 cost=0.00..6230.80
+                    SeqScan(p) rows=5973 cost=0.00..2649.52
+                SeqScan(u) rows=38603 cost=0.00..1002.69
